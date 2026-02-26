@@ -1,4 +1,5 @@
 from flask import Flask, render_template, request
+from database import get_connection
 
 app = Flask(__name__)
 
@@ -18,6 +19,25 @@ def login():
         print(f"Password:{password}")
 
         return "Submitted, check term"
+    
+    return render_template("login.html")
+
+@app.route("/signup", methods=["GET", "POST"])
+def signup():
+    if request.method == "POST":
+        username = request.form.get("username")
+        password = request.form.get("password")
+
+        conn = get_connection()
+        cursor = conn.cursor()
+        cursor.execute(
+            "INSERT INTO users (username, password) VALUES (?,?)",
+            (username, password)
+        )
+        conn.commit()
+        conn.close()
+
+        return "User created :)"
     
     return render_template("login.html")
 
