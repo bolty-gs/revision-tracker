@@ -1,5 +1,6 @@
 from flask import Flask, render_template, request
-from database import get_connection
+from database import init_db, get_connection
+
 
 app = Flask(__name__)
 
@@ -42,4 +43,5 @@ def signup():
     return render_template("login.html")
 
 if __name__ == "__main__":
+    init_db()
     app.run(debug=True)
